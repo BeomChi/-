@@ -12,3 +12,27 @@
 사용 언어 및 툴 : C#, 유니티
 
 https://github.com/JiRaccoon/Project_Cube.git
+
+
+제목 : Unaccounted_for
+
+인원 : 3명
+담당 파트
+- 레벨 디자인
+- 라이팅
+- 몬스터 (1스테이지)
+
+사용 언어 및 툴 : C#, 유니티
+
+https://github.com/JiRaccoon/Project_Cube.git
+
+
+제목 : PetPetRabbit
+
+인원 : 5명
+담당 파트
+- 플레이어
+
+사용 언어 및 툴 : C#, 유니티
+
+https://github.com/JiRaccoon/Project_Cube.git
