@@ -1,0 +1,125 @@
+스택 (Stack)
+스택
+스택은 후입선출 (LIFO, Last In First Out) 구조를 가지는 자료구조이다.
+가장 마지막에 들어온 데이터가 가장 먼저 나간다.
+
+예시
+push(1)
+push(2)
+push(3)
+
+pop() → 3
+pop() → 2
+pop() → 1
+
+쉽게 생각하면
+접시 쌓기
+책 쌓기
+박스 쌓기
+
+스택 특징
+중간 데이터에 접근할 수 없다.
+맨 위 데이터만 접근 가능하다
+삽입과 삭제는 한쪽에서만 일어난다.
+구조가 단순하다
+구현이 쉽다
+시간 복잡도가 매우 좋다
+
+즉, 스택은 데이터를 저장하는 구조라기보다 흐름을 관리하는 구조라고 보면 이해가 편하다.
+
+스택 기본 연산
+| 연산		| 설명          		   |
+| ----------- | --------------------------- |
+| push  	| 데이터 삽입       	   |
+| pop   	| 데이터 제거       	   |
+| top   	| 맨 위 데이터 확인	   |
+| empty 	| 스택이 비어있는지 확인 |
+| size  	| 스택 크기        		   |
+
+시간 복잡도
+스택은 모든 연산이 거의 O(1)이다
+| 연산    	| 시간 복잡도 	|
+| -----------	| ------------------	|
+| push  	| O(1)   		|
+| pop   	| O(1)   		|
+| top   	| O(1)   		|
+| empty 	| O(1)   		|
+| size  	| O(1)   		|
+
+왜냐하면
+맨 뒤에 넣고
+맨 뒤에서 빼기 때문이다.
+즉, 배열의 back()만 사용한다.
+
+
+예제 코드
+
+template<typename T>
+class Stack
+{
+public:
+	void push(const T& value)
+	{
+		_container.push_back(value);
+	}
+
+	void pop()
+	{
+		_container.pop_back();
+	}
+
+	T& top()
+	{
+		return _container.back();
+	}
+
+	bool empty() { return _container.empty(); }
+	int size() { return _container.size(); }
+
+private:
+	Vector<T> _container;
+
+};
+
+스택 사용되는 곳
+DFS(깊이 우선 탐색)
+그래프 탐색에서 사용
+DFS는 내부적으로 스택 구조를 사용한다.
+(재귀함수 = 스택 구조)
+
+되돌리기 기능(Undo / Crtl + Z)
+그림판
+포토샵
+문서 편집기
+게임 되돌리기
+
+이전 상태를 스택에 저장해두고 pop하면 이전 상태로 돌아감
+
+함수 호출 스택(Call Stack)
+프로그램에서 함수 호출할 떄 스택 사용됨
+main()
+  → A()
+      → B()
+이 순서로 호출되면
+main
+A
+B
+스택에 쌓이고
+B 끝나면 pop -> A
+A 끝나면 pop -> main
+
+스택 한 줄 정리
+Stack  = 후입 선출(LIFO)
+push / pop / top
+모든 연산 O(1)
+DFS / Undo / 괄호검사 / 함수호출 / UI 관리
+
+스택 vs 큐 차이
+| 구조    	| 방식   	|
+| ----- 	| ---- 		|
+| Stack 	| LIFO 	|
+| Queue 	| FIFO 	|
+
+Stack -> 탑 쌓기
+Queue -> 줄서기
+

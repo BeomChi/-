@@ -1,0 +1,5 @@
+BlendState
+OM 단계에서 Blend(투명도)를 설정하는 상태
+
+SimpleState
+ 
