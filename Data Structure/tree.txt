@@ -1,1 +1,223 @@
 트리(Tree)
+트리는 그래프의 종류로, 사이클이 없는 계층적 구조의 자료구조이다.
+노드(Node)와 간선(Edge)으로 구성되며, 부모 - 자식 관계를 가진다.
+
+트리 = 사이클 없는 그래프 + 계층 구조
+
+트리의 특징
+루트 노드(Root)가 존재하낟.
+사이클이 없다.
+부모 - 자식 관계를 가진다.
+N개의 노드는 N - 1개의 간선을 가진다.
+하나의 노드에서 여러 자식 노드를 가질 수 있다.
+
+트리이 용어
+기본 용어
+루트 (Root) : 트리의 시작 노드
+리프 (Leaf) : 자식이 없는 노드
+부모 (Parent) / 자식 (Child)
+형제 (Sibling) : 같은 부모를 가진 노드
+레벨 (Level) : 트리의 특정 깊이를 가지는 노드의 집합
+
+깊이 vs 높이
+깊이 (Depth)
+루트에서 해당 노드까지의 거리 ( 간선의 수)
+
+높이(Height)
+해당 노드에서 가장 깊은 리프까지의 거리
+
+트리의 종류
+일반트리(General Tree)
+계층에 대한 제한이 없는 트리, 즉 둘 이상의 자식 노드를 가질 수 있다.
+
+이진트리(Bunary Tree)
+자식 노드의 개수가 최대 2개인 트리
+
+전 이진트리(Full Binary Tree)
+모든 노드가 0개 또는 2개의 자식 노드를 갖는 트리
+
+완전 이진트리(Complete Binary Tree)
+마지막 레벨을 제외하고 모두 꽉 차있는 트리
+마지막 레벨은 왼쪽 부터 채워짐
+
+포화 이진트리(Perfect Binary Tree)
+전 이진트리이면서 완전 이진트리인 경우로, 모든 말단 노드는 같은 높이에 있어야하며,
+모든 레벨이 꽉차 있는 트리
+트리의 높이가 k일때, 노드의 개수가 정확히 2^k - 1개여야 하낟.
+
+이진탐색트리(Binary Search Tree)
+모든 노드 n이 왼쪽 자식들 < n < 모든 오른쪽 자식들을 만족하는 이진트리
+
+균형 트리 vs 비균형 트리
+
+균형 트리 
+높이 logN
+탐색 O(logN)
+
+예를 들어 레드-블랙 트리, avl 트리
+
+비균형 트리
+한쪽으로 쏠린 트리 -> Linked List 형태
+O(N)
+
+트리의 핵심
+트리 = 재귀 구조
+모든 트리 알고리즘은 재귀로 풀린다.
+
+순회
+DFS 기반
+전위 순회 (Preorder)
+루트 -> 왼쪽 -> 오른쪽
+
+중위 순회 (Inorder)
+왼쪽 -> 루트 -> 오른쪽
+
+후위 순회 (Postorder)
+왼쪽 -> 오른쪽 -> 루트
+
+BFS (Level Order)
+레벨 순서대로 탐색 (Queue 사용)
+
+코드
+// 연결 리스트 || 트리
+class Node
+{
+public:
+    Node(int data) : data(data) { }
+
+public:
+    Node* next = nullptr;
+    Node* prev = nullptr;
+    int data;
+
+};
+
+
+class Node
+{
+public:
+    Node(const char* data) : data(data) { }
+
+public:
+    const char* data;
+    vector<Node*> children;
+};
+
+Node* CreateTree()
+{
+    Node* root = new Node("R1 개발실");
+
+    {
+        Node* node = new Node("디자인팀");
+        root->children.push_back(node);
+        {
+            Node* leaf = new Node("전투");
+            node->children.push_back(leaf);
+        }
+        {
+            Node* leaf = new Node("경제");
+            node->children.push_back(leaf);
+        }
+        {
+            Node* leaf = new Node("스토리");
+            node->children.push_back(leaf);
+        }
+    }
+    {
+        Node* node = new Node("프로그래밍팀");
+        root->children.push_back(node);
+        {
+            Node* leaf = new Node("클라");
+            node->children.push_back(leaf);
+        }
+        {
+            Node* leaf = new Node("서버");
+            node->children.push_back(leaf);
+        }
+        {
+            Node* leaf = new Node("엔진");
+            node->children.push_back(leaf);
+        }
+    }
+    {
+        Node* node = new Node("아트팀");
+        root->children.push_back(node);
+        {
+            Node* leaf = new Node("캐릭터");
+            node->children.push_back(leaf);
+        }
+        {
+            Node* leaf = new Node("배경");
+            node->children.push_back(leaf);
+        }
+    }
+
+
+    return root;
+}
+// 깊이 (depth) : 루트에서 어떤 노드에 도달하기 위해 거쳐야하는 간선의 개수
+void PrintTree(Node* root, int depth = 0)
+{
+    for (int i = 0; i < depth; i++)
+        cout << "-";
+    cout << root->data << endl;
+
+    int size = root->children.size();
+    for (int i = 0; i < size; i++)
+    {
+        Node* node = root->children[i];
+        PrintTree(node, depth + 1);
+    }
+}
+
+// 높이
+int GetHeight(Node* root)
+{
+    int ret = 1;
+
+    int size = root->children.size();
+    for (int i = 0; i < size; i++)
+    {
+        Node* node = root->children[i];
+        int h = GetHeight(node) + 1;
+
+        if (ret < h)
+            ret = h;
+    }
+
+    return ret;
+}
+
+int main()
+{
+    Node* root = CreateTree();
+
+    PrintTree(root);
+
+    int h = GetHeight(root);
+    cout << h;
+
+    /*Node* n1 = new Node(1);
+    Node* n2 = new Node(2);
+    Node* n3 = new Node(3);
+    Node* n4 = new Node(4);
+    Node* n5 = new Node(5);
+
+    //[1]<->[2]<->[3]<->[4]<->[5]
+    //[head]               [tail]
+    n1->next = n2;
+    n2->prev = n1;
+
+    n2->next = n3;
+    n3->prev = n2;
+
+    n3->next = n4;
+    n4->prev = n3;
+
+    n4->next = n5;
+    n5->prev = n4;
+
+    Node* head = n1;
+    Node* tail = n5;
+    
+}
