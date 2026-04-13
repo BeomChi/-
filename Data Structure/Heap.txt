@@ -1,0 +1,134 @@
+힙 (Heap)
+힙(Heap)은 완전 이진 트리의 일종으로 여러개의
+값들 중에서 최댓값이나 최솟값을 빠르게 찾아내도록 만들어진 자료구조이다.
+힙(Heap)은 일종의 반정렬상태(느슨한 정렬 상태)를 유지하는데,
+이는 큰 값이 상위 레벨에 있고 작은 값이 하위 레벨에 있는 정도를 의미한다.
+더 직관적인 말로 설명하자면 부모노드가 자식 노드보다 항상 큰
+maximum binary tree 라고 할 수 있다.
+힙은 항상 완전 이진트리의 모습을 지닌다.
+
+힙의 종류
+최대 힙(max heap)
+부모 노드의 값이 자식 노드의 값보다 크거나 같은 완전 이진 트리
+
+최소 힙(min heap)
+부모 노드의 값이 자식 노드의 값보다 작거나 같은 이진트리
+
+힙 특징
+1 법칙 : 부모 노드가 가진 값은 항상 자식 노드가 가진 값보다 크다.(최대 힙)
+ 1) 마지막 레벨을 제외한 모든 레벨에 노드가 꽉차 있다(완전 이진트리)
+ 2) 마지막 레벨에 노드가 있을 때는, 항상 왼쪽부터 순서대로 채워야 한다.
+2 법칙 : 노드 개수를 알면, 트리 구조는 무조건 확정할 수 있다.
+배열을 이용해서 힙 구조를 바로 표현할 수 있다.
+ 1) i 번 노드의 왼쪽 자식은 [(2 * i) + 1]번
+ 2) i 번 노드의 오른쪽 자식은 [(2 * i) + 2]번
+ 3) i 번 노드의 부모는 [(i - 1) / 2]번
+
+힙 구현
+힙의 구현은 STL에서 두가지로 가능하다.
+1.<algorithm>에 있는 vector을 활용한 make_heap
+2.<queue>에 있는 priority_queue
+
+둘의 차이점
+make_heap을 사용하여 구현을 할시 vector처럼 모든 원소 접근이 가능하지만,
+priority_queue를 이용하면 그 부분은 불가능하다.
+
+
+코드
+힙을 사용해서 구현한 우선순위 큐
+template<typename T,typename Predicate = less<T>>
+class PriorityQueue
+{
+public:
+    //O(logN) 트리의 높이 의존적이다
+    void push(const T& data)
+    {
+        // 우선 힙 구조부터 맞추는 작업
+        _heap.push_back(data);
+
+        // 도장깨기 시작
+        int current = static_cast<int>(_heap.size()) - 1;
+
+        // 루트 노드까지
+        while (current > 0)
+        {
+            // 부모 노드와 비교해서 더 작으면 패배
+            int next = (current - 1) / 2;
+            /*if (_heap[now] < _heap[next])
+                break;*/
+            if (_predicate(_heap[current], _heap[next]))
+                break;
+
+            // 데이터 교체
+            ::swap(_heap[current], _heap[next]);
+            current = next;
+        }
+    }
+
+    //O(logN)
+    void pop()
+    {
+        _heap[0] = _heap.back();
+        _heap.pop_back();
+
+        int current = 0;
+
+        while (true)
+        {
+            int left = 2 * current + 1;
+            int right = 2 * current + 2;
+            
+            if (left >= (int)_heap.size())
+                break;
+
+            int next = current;
+
+            //왼쪽 비교
+            if (_heap[next] < _heap[left])
+                next = left;
+
+            // 둘 중 승자를 오른쪽과 비교
+            //if (right < _heap.size() && _heap[next] < _heap[right])
+            if (right < _heap.size() && _predicate(_heap[next] , _heap[right]))
+                next = right;
+
+            //왼족 || 오른쪽 둘 다 현재 값보다 작으면 종료
+            if (next == current)
+                break;
+
+            ::swap(_heap[current], _heap[next]);
+
+            current = next;
+        }
+    }
+
+    //O(1)
+    T& top()
+    {
+        return _heap[0];
+    }
+
+    //O(1)
+    bool empty()
+    {
+        return _heap.empty();
+    }
+private:
+    vector<T> _heap;
+    Predicate _predicate;
+};
+
+int main()
+{
+    PriorityQueue<int, greater<int> > pq;
+
+    pq.push(10);
+    pq.push(40);
+    pq.push(30);
+    pq.push(50);
+    pq.push(20);
+
+    int value = pq.top();
+    pq.pop();
+    
+}
