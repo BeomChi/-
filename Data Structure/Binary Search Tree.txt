@@ -1,0 +1,109 @@
+이진 탐색 트리(Binary Search Tree)
+이진 탐색 트리는 다음과 같은 특성을 지닌다.
+노드의 왼쪽 하위 트리에는 노드의 키보다 작은 키가 있는 노드만 포함된다.
+노드의 오른쪽 하위 트리에는 노드의 키보다 큰 키가 있는 노드만 포함된다.
+왼쪽 및 오른쪽 하위 트리도 각각 이진 탐색 트리여야 한다.
+중복된 키를 허용하지 않는다.
+
+이러한 특성때문에 효율적인 검색이 가능하다.
+
+검색(Search)
+루트에서 시작한다.
+검색 값을 루트와 비교한다. 루트보다 작으면 왼쪽으로, 크다면 오른쪽으로 재귀호출한다.
+일치하는 값을 찾을 때까지 절차를 반복한다.
+검색 값이 없으면 null을 반환한다.
+
+재귀함수 버전
+```
+Node* Search(const Node* root, const T& data)
+{
+	if (root == nullptr || root->data == data)
+		return root;
+
+	if (root->_data < data)
+		return Search(root->_right, data);
+
+	return Search(root->_left, data);
+}
+```
+
+함수버전
+```
+Node* Search(const T& data)
+{
+	Node* current = _root;
+
+	if (current == nullptr)
+		return nullptr;
+
+	while (current != nullptr)
+	{
+		if (current->_data == data)
+			return current;
+
+		if (current->_data < data)
+			current = current->_right;
+		else
+			current = current->_left;
+	}
+
+	return nullptr;
+}
+```
+
+삽입
+이진 탐색 트리에 데이터를 삽입하는 작업을 말한다.
+Root에서 시작한다.
+삽입 값을 루트와 비교하고 루트보다 작으면 왼쪽, 크면 오른쪽으로 들어간다.
+리프 노드에 도달한 후 노드보다 크다면 오른쪽에 작다면 왼쪽에 삽입한다.
+
+재귀함수 버전
+```
+Node* Insert(Node* root, const T& data)
+{
+	if (root == nullptr)
+		return new Node<T>(data);
+
+	if (root->_data < data)
+		root->_right = Insert(root->_right, data);
+	else
+		root->_left = Insert(root->_left, data);
+
+	return root;
+}
+```
+
+반복문 버전
+```
+void Insert(const T& data)
+{
+	if (_root == nullptr)
+	{
+		_root = new Node<T>(data);
+		return;
+	}
+
+	Node* parent = nullptr;
+	Node* current = _root;
+
+	while (current != nullptr)
+	{
+		parent = current;
+
+		if (current->_data < data)
+			current = current->_right;
+		else
+			current = current->_left;
+	}
+
+	if (parent->_data < data)
+		parent->_right = new Node<T>(data);
+	else
+		parent->_left = new Node<T>(data);
+
+}
+```
+
+삭제
+삭제에는 몇가지 조건이 있다.
+

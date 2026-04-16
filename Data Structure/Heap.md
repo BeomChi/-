@@ -149,198 +149,101 @@ top()만 접근 가능
 힙을 사용해서 구현한 우선순위 큐
 
 ```
-
 template<typename T,typename Predicate = less<T>>
-
 class PriorityQueue
-
 {
-
 public:
-
-&#x20;   //O(logN) 트리의 높이 의존적이다
-
-&#x20;   void push(const T\& data)
-
-&#x20;   {
-
-&#x20;       // 우선 힙 구조부터 맞추는 작업
-
-&#x20;       \_heap.push\_back(data);
-
-
-
-&#x20;       // 도장깨기 시작
-
-&#x20;       int current = static\_cast<int>(\_heap.size()) - 1;
-
-
-
-&#x20;       // 루트 노드까지
-
-&#x20;       while (current > 0)
-
-&#x20;       {
-
-&#x20;           // 부모 노드와 비교해서 더 작으면 패배
-
-&#x20;           int next = (current - 1) / 2;
-
-&#x20;           /\*if (\_heap\[now] < \_heap\[next])
-
-&#x20;               break;\*/
-
-&#x20;           if (\_predicate(\_heap\[current], \_heap\[next]))
-
-&#x20;               break;
-
-
-
-&#x20;           // 데이터 교체
-
-&#x20;           ::swap(\_heap\[current], \_heap\[next]);
-
-&#x20;           current = next;
-
-&#x20;       }
-
-&#x20;   }
-
-
-
-&#x20;   //O(logN)
-
-&#x20;   void pop()
-
-&#x20;   {
-
-&#x20;       \_heap\[0] = \_heap.back();
-
-&#x20;       \_heap.pop\_back();
-
-
-
-&#x20;       int current = 0;
-
-
-
-&#x20;       while (true)
-
-&#x20;       {
-
-&#x20;           int left = 2 \* current + 1;
-
-&#x20;           int right = 2 \* current + 2;
-
-&#x20;           
-
-&#x20;           if (left >= (int)\_heap.size())
-
-&#x20;               break;
-
-
-
-&#x20;           int next = current;
-
-
-
-&#x20;           //왼쪽 비교
-
-&#x20;           if (\_heap\[next] < \_heap\[left])
-
-&#x20;               next = left;
-
-
-
-&#x20;           // 둘 중 승자를 오른쪽과 비교
-
-&#x20;           //if (right < \_heap.size() \&\& \_heap\[next] < \_heap\[right])
-
-&#x20;           if (right < \_heap.size() \&\& \_predicate(\_heap\[next] , \_heap\[right]))
-
-&#x20;               next = right;
-
-
-
-&#x20;           //왼족 || 오른쪽 둘 다 현재 값보다 작으면 종료
-
-&#x20;           if (next == current)
-
-&#x20;               break;
-
-
-
-&#x20;           ::swap(\_heap\[current], \_heap\[next]);
-
-
-
-&#x20;           current = next;
-
-&#x20;       }
-
-&#x20;   }
-
-
-
-&#x20;   //O(1)
-
-&#x20;   T\& top()
-
-&#x20;   {
-
-&#x20;       return \_heap\[0];
-
-&#x20;   }
-
-
-
-&#x20;   //O(1)
-
-&#x20;   bool empty()
-
-&#x20;   {
-
-&#x20;       return \_heap.empty();
-
-&#x20;   }
-
+    //O(logN) 트리의 높이 의존적이다
+    void push(const T& data)
+    {
+        // 우선 힙 구조부터 맞추는 작업
+        _heap.push_back(data);
+
+        // 도장깨기 시작
+        int current = static_cast<int>(_heap.size()) - 1;
+
+        // 루트 노드까지
+        while (current > 0)
+        {
+            // 부모 노드와 비교해서 더 작으면 패배
+            int next = (current - 1) / 2;
+            /*if (_heap[now] < _heap[next])
+                break;*/
+            if (_predicate(_heap[current], _heap[next]))
+                break;
+
+            // 데이터 교체
+            ::swap(_heap[current], _heap[next]);
+            current = next;
+        }
+    }
+
+    //O(logN)
+    void pop()
+    {
+        _heap[0] = _heap.back();
+        _heap.pop_back();
+
+        int current = 0;
+
+        while (true)
+        {
+            int left = 2 * current + 1;
+            int right = 2 * current + 2;
+            
+            if (left >= (int)_heap.size())
+                break;
+
+            int next = current;
+
+            //왼쪽 비교
+            if (_heap[next] < _heap[left])
+                next = left;
+
+            // 둘 중 승자를 오른쪽과 비교
+            //if (right < _heap.size() && _heap[next] < _heap[right])
+            if (right < _heap.size() && _predicate(_heap[next] , _heap[right]))
+                next = right;
+
+            //왼족 || 오른쪽 둘 다 현재 값보다 작으면 종료
+            if (next == current)
+                break;
+
+            ::swap(_heap[current], _heap[next]);
+
+            current = next;
+        }
+    }
+
+    //O(1)
+    T& top()
+    {
+        return _heap[0];
+    }
+
+    //O(1)
+    bool empty()
+    {
+        return _heap.empty();
+    }
 private:
-
-&#x20;   vector<T> \_heap;
-
-&#x20;   Predicate \_predicate;
-
+    vector<T> _heap;
+    Predicate _predicate;
 };
 
-
-
 int main()
-
 {
+    PriorityQueue<int, greater<int> > pq;
 
-&#x20;   PriorityQueue<int, greater<int> > pq;
+    pq.push(10);
+    pq.push(40);
+    pq.push(30);
+    pq.push(50);
+    pq.push(20);
 
-
-
-&#x20;   pq.push(10);
-
-&#x20;   pq.push(40);
-
-&#x20;   pq.push(30);
-
-&#x20;   pq.push(50);
-
-&#x20;   pq.push(20);
-
-
-
-&#x20;   int value = pq.top();
-
-&#x20;   pq.pop();
-
-&#x20;   
-
-}
+    int value = pq.top();
+    pq.pop();
+}    
 
 ```
 
@@ -350,7 +253,7 @@ int main()
 
 재할당이 발생하면 기존 주소가 무효화된다.
 
-
+```
 
 int\* p = \&vec\[0];
 
@@ -358,7 +261,7 @@ vec.push\_back(10);
 
 \*p-> 위험
 
-
+```
 
 해결 방안 push\_back 이후에 주소를 가져온다.
 

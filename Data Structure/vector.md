@@ -84,7 +84,7 @@ capacity가 부족할 때만 O(n)이다. 공간을 확장하고 새로이 복사
 
 ### 코드
 
-
+```
 
 template <typename T>
 
@@ -271,7 +271,7 @@ public:
 &#x09;T\* \_buffer = nullptr;
 
 };
-
+```
 
 
 ### vector 동작원리

@@ -51,7 +51,7 @@ FIFO와 LIFO 모두 구현가능
 
 
 ##### C++ STL
-
+```
 deque<int> dq;
 
 
@@ -71,7 +71,7 @@ dq.pop\_back();
 dq.front();
 
 dq.back();
-
+```
 
 
 ### 시간 복잡도
