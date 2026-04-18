@@ -378,7 +378,7 @@ Node\* Delete(Node\* root, const T\& data)
 
 이거에 대한 해결 방안
 
-균형 트리(ANL, Red-Black Tree)
+균형 트리(AVL, Red-Black Tree)
 
 
 
